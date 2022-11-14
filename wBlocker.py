@@ -1,4 +1,5 @@
 try:
+    import http.client as httplib
     import os
     import platform
     import sys
@@ -6,6 +7,7 @@ try:
     from datetime import date
     from threading import Thread
 
+    import requests
     from rich.console import Console
 except ImportError:
     print('\nERROR: Module Not Found !!')
@@ -49,6 +51,42 @@ class wBlocker():
                 '\n[bold red]FAILED :[/bold red] Your operating system is not supported\n')
             exit()
 
+    def cnet(self):
+        try:
+            requests.get("https://www.google.com/", timeout=5)
+            return True
+        except:
+            return False
+
+    def update_wb(self):
+        if not os.path.isfile(version_path):
+            self.console.print(
+                '\n[bold red]WARNING :[/bold red] Please re-clone the script to fix this problem\n')
+            exit()
+        self.console.print(
+            "[bold blue][~] Checking for update... [/bold blue]")
+        conn = httplib.HTTPSConnection("raw.githubusercontent.com")
+        conn.request("GET", "/dhitznswa/wBlocker/main/core/version.txt")
+        vrepo = conn.getresponse().read().strip().decode()
+        with open(version_path) as vpath:
+            verPath = vpath.read().strip()
+        if vrepo == verPath:
+            self.console.print(
+                "[bold green][*] wBlocker is up to date!! [/bold green]\n")
+            exit()
+        else:
+            self.console.print(
+                "[bold blue][+] An update has been found ::: Updating...  [/bold blue]\n")
+            conn.request("GET", "/dhitznswa/wBlocker/main/wBlocker.py")
+            newCode = conn.getresponse().read().strip().decode()
+            with open("wBlocker.py", "w") as wb:
+                wb.write(newCode)
+            with open(version_path, "w") as vp:
+                vp.write(vrepo)
+            self.console.print(
+                "[bold green][*] Successfully updated :smile: [/bold green]\n")
+            exit()
+
     def disable(self):
         sites = self._sites.readlines()
         self._hosts.write(
@@ -79,4 +117,4 @@ class wBlocker():
 
 
 if __name__ == "__main__":
-    wBlocker().reset()
+    wBlocker().update_wb()
