@@ -73,6 +73,7 @@ class wBlocker():
         if vrepo == verPath:
             self.console.print(
                 "[bold green][*] wBlocker is up to date!! [/bold green]\n")
+            conn.close()
             exit()
         else:
             self.console.print(
@@ -85,6 +86,7 @@ class wBlocker():
                 vp.write(vrepo)
             self.console.print(
                 "[bold green][*] Successfully updated :smile: [/bold green]\n")
+            conn.close()
             exit()
 
     def disable(self):
