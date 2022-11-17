@@ -15,7 +15,6 @@ except ImportError:
     print('[~] There are some modules that are not installed yet. Type "pip install -r request.txt" in the terminal with the path where your folder saves this tool\n')
     exit()
 
-env = dotenv_values(".env")
 
 if platform.system() == "Windows":
     hosts_path = "C:\Windows\System32\drivers\etc\hosts"
@@ -23,9 +22,12 @@ if platform.system() == "Windows":
 else:
     hosts_path = "/etc/hosts"
     clearT = "clear"
-
-if env.get("MODE") == "development":
-    hosts_path = 'hosts'
+try:
+    env = dotenv_values(".env")
+    if env.get("MODE") == "development":
+        hosts_path = 'hosts'
+except:
+    pass
 
 version_path = os.path.join('core', 'version.txt')
 default_hosts = os.path.join('core', 'default-hosts.txt')
@@ -101,7 +103,7 @@ class wBlocker():
                 if len(s) < 6:
                     continue
                 self._hosts.write("\n" + self.ipder + " " + s)
-                self.console.print("[bold green]BLOCKED[/bold green] -", s)
+                self.console.print("[green]BLOCKED[/green] :arrow_right: ", s)
                 time.sleep(0.5)
             self._hosts.close()
             self._sites.close()
@@ -124,7 +126,7 @@ class wBlocker():
             self.console.print(
                 "++++++++++++++++++++++++++++++++++++", style="bold green")
             self.console.print(
-                "     WBlocker Tools by Dhitznswa    ", style="bold red")
+                "     WBlocker Tools by DhitzNswa    ", style="bold yellow italic")
             self.console.print(
                 "++++++++++++++++++++++++++++++++++++", style="bold green")
             self.console.print("[WB-001] Block Site", style="blue")
